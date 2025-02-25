@@ -33,7 +33,7 @@ const Searchbar = ({ searchQuery, setSearchQuery }: SearchbarProps) => {
           />
         </div>
         <div>
-          <FaUser className="text-white h-10 p-0 w-full"/>
+          <FaUser className="text-white h-10 p-0 w-6"/>
         </div>
       </div>
     </nav>

@@ -76,7 +76,7 @@ const App = () => {
                   <p className="text-teal-700">{note}</p>
                   <button
                     onClick={() => handleDeleteNote(index)}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-teal-500 hover:text-teal-700 cursor-pointer"
                   >
                     ✖
                   </button>
