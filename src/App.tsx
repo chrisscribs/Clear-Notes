@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import NoteInput from "./components/NoteInput";
 import Searchbar from "./components/Searchbar";
+import Footer from "./components/Footer";
 
 const App = () => {
   const [notes, setNotes] = useState<string[]>([]);
@@ -90,6 +91,7 @@ const App = () => {
           </div>
         </div>
       </div>
+          <Footer />
     </>
   );
 };
