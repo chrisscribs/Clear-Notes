@@ -57,9 +57,8 @@ const App = () => {
 
   return (
     <>
-      <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
       <div className="min-h-screen flex items-center justify-center bg-green-50">
+        <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         <div className="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg border border-green-200">
           <h1 className="text-3xl font-semibold text-teal-700 text-center mb-4">
             Clear Notes
@@ -91,7 +90,7 @@ const App = () => {
           </div>
         </div>
       </div>
-          <Footer />
+      <Footer />
     </>
   );
 };
