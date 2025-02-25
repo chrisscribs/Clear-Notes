@@ -31,6 +31,13 @@ const NoteInput = ({ onSave }: NoteInputProps) => {
     );
   }, [placeholders]);
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleSave();
+    }
+  };
+
   const handleSave = () => {
     if (note.trim() === "") return;
     onSave(note);
@@ -47,6 +54,7 @@ const NoteInput = ({ onSave }: NoteInputProps) => {
         placeholder={placeholder}
         value={note}
         onChange={(e) => setNote(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
       <div className="flex justify-center mt-4">
         <button
