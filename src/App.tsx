@@ -1,4 +1,12 @@
 import { useState, useEffect } from "react";
+import { db } from "./firebaseConfig";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import NoteInput from "./components/NoteInput";
 import Searchbar from "./components/Searchbar";
 
@@ -6,30 +14,39 @@ const App = () => {
   const [notes, setNotes] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // Load notes from LocalStorage on mount
+  const notesCollectionRef = collection(db, "notes"); // Firestore collection reference
+
+  // Load notes from Firestore when the app loads
   useEffect(() => {
-    const savedNotes = JSON.parse(
-      localStorage.getItem("clearNotes") || "[]"
-    ) as string[];
-    setNotes(savedNotes);
+    const fetchNotes = async () => {
+      const querySnapshot = await getDocs(notesCollectionRef);
+      const notesData = querySnapshot.docs.map((doc) => doc.data().text);
+      setNotes(notesData);
+    };
+    fetchNotes();
   }, []);
 
-  // Save notes to LocalStorage whenever notes change
-  useEffect(() => {
-    localStorage.setItem("clearNotes", JSON.stringify(notes));
-  }, [notes]);
-
-  // Function to add a new note
-  const handleSaveNote = (newNote: string) => {
-    if (!newNote.trim()) return; // Prevent saving empty notes
-    const updatedNotes = [...notes, newNote];
-    setNotes(updatedNotes);
+  // Function to add a new note to Firestore
+  const handleSaveNote = async (newNote: string) => {
+    if (!newNote.trim()) return;
+    const docRef = await addDoc(notesCollectionRef, { text: newNote });
+    setNotes([...notes, newNote]);
   };
 
-  // Function to delete a note
-  const handleDeleteNote = (index: number) => {
-    const updatedNotes = notes.filter((_, i) => i !== index);
-    setNotes(updatedNotes);
+  // Function to delete a note from Firestore
+  const handleDeleteNote = async (index: number) => {
+    const noteToDelete = notes[index];
+
+    // Fetch the corresponding Firestore document and delete it
+    const querySnapshot = await getDocs(notesCollectionRef);
+    const docToDelete = querySnapshot.docs.find(
+      (doc) => doc.data().text === noteToDelete
+    );
+
+    if (docToDelete) {
+      await deleteDoc(doc(db, "notes", docToDelete.id));
+      setNotes(notes.filter((_, i) => i !== index));
+    }
   };
 
   // Filter notes based on search query (case-insensitive)
@@ -39,7 +56,6 @@ const App = () => {
 
   return (
     <>
-      {/* 🟢 Search Bar Component */}
       <Searchbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <div className="min-h-screen flex items-center justify-center bg-green-50">
