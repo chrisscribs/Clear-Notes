@@ -25,13 +25,13 @@ const App = () => {
       setNotes(notesData);
     };
     fetchNotes();
-  }, []);
+  }, [notesCollectionRef]);
 
   // Function to add a new note to Firestore
   const handleSaveNote = async (newNote: string) => {
     if (!newNote.trim()) return;
-    const docRef = await addDoc(notesCollectionRef, { text: newNote });
-    setNotes([...notes, newNote]);
+    await addDoc(notesCollectionRef, { text: newNote }); // ✅ No unused variable
+    setNotes([...notes, newNote]); // Update UI
   };
 
   // Function to delete a note from Firestore
