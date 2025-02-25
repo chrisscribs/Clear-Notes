@@ -67,7 +67,9 @@ const App = () => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 text-center">No notes found.</p>
+              <p className="text-gray-500 text-center">
+                There are no notes here. <br /> What else is on your mind?
+              </p>
             )}
           </div>
         </div>
