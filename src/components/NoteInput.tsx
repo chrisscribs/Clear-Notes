@@ -23,8 +23,16 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
     []
   );
 
+  const categories = [
+    { value: "focus", label: "🌱 Deep Focus" },
+    { value: "growth", label: "💡 Growth & Reflection" },
+    { value: "flow", label: "🌊 Let it Flow" },
+    { value: "letgo", label: "🌬️ Let it Go" },
+  ];
+
   const [placeholder, setPlaceholder] = useState("");
   const [note, setNote] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("focus");
 
   useEffect(() => {
     setPlaceholder(
@@ -41,8 +49,9 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
 
   const handleSave = () => {
     if (note.trim() === "") return;
-    onSave(note);
+    onSave(note, selectedCategory); // ✅ Pass both note text and selected category
     setNote("");
+    setSelectedCategory("focus"); // ✅ Reset category after saving
     setPlaceholder(
       placeholders[Math.floor(Math.random() * placeholders.length)]
     );
@@ -60,7 +69,7 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
       </button>
 
       <h1 className="text-3xl font-semibold text-teal-700 text-center mb-4">
-        Clear Notes
+        Clear Notes.
       </h1>
 
       <textarea
@@ -70,6 +79,27 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
         onChange={(e) => setNote(e.target.value)}
         onKeyDown={handleKeyDown}
       />
+
+      <div className="mt-4">
+        <label className="block text-teal-700 font-semibold mb-2">
+          Select Category:
+        </label>
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className="w-full p-2 border rounded-lg text-teal-700 border-green-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent resize-none"
+        >
+          {categories.map((cat) => (
+            <option
+              key={cat.value}
+              value={cat.value}
+              className="focus:bg-teal-700"
+            >
+              {cat.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="flex justify-center mt-4">
         <button

@@ -18,7 +18,7 @@ interface Note {
 }
 
 const App = () => {
-  const [notes, setNotes] = useState<string[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [showNoteInput, setShowNoteInput] = useState(false);
 
@@ -27,34 +27,42 @@ const App = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       const querySnapshot = await getDocs(notesCollectionRef);
-      const notesData = querySnapshot.docs.map((doc) => doc.data().text);
-      setNotes(notesData);
+      const notesData = querySnapshot.docs.map((doc) => doc.data() as Note);
+      setNotes(notesData); // ✅ Store full note objects, including category
     };
     fetchNotes();
-  }, [notesCollectionRef]);
+  }, []);
 
-  const handleSaveNote = async (newNote: string) => {
+  const handleSaveNote = async (newNote: string, category: string) => {
     if (!newNote.trim()) return;
-    await addDoc(notesCollectionRef, { text: newNote });
-    setNotes([...notes, newNote]);
+
+    const note = { text: newNote, category: category || "focus" }; // ✅ Ensure category is assigned
+
+    await addDoc(notesCollectionRef, note); // ✅ Save the full object to Firestore
+
+    // ✅ Fetch the updated list of notes from Firestore after saving
+    const querySnapshot = await getDocs(notesCollectionRef);
+    const updatedNotes = querySnapshot.docs.map((doc) => doc.data() as Note);
+    setNotes(updatedNotes);
   };
 
-  const handleDeleteNote = async (index: number) => {
-    const noteToDelete = notes[index];
-
+  const handleDeleteNote = async (noteText: string) => {
     const querySnapshot = await getDocs(notesCollectionRef);
     const docToDelete = querySnapshot.docs.find(
-      (doc) => doc.data().text === noteToDelete
+      (doc) => doc.data().text === noteText
     );
 
     if (docToDelete) {
       await deleteDoc(doc(db, "notes", docToDelete.id));
-      setNotes(notes.filter((_, i) => i !== index));
+      const updatedNotes = querySnapshot.docs
+        .filter((doc) => doc.id !== docToDelete.id)
+        .map((doc) => doc.data() as Note);
+      setNotes(updatedNotes);
     }
   };
 
-  const filteredNotes = notes.filter((note) =>
-    note.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredNotes = notes.filter(
+    (note) => note.text.toLowerCase().includes(searchQuery.toLowerCase()) // ✅ Use note.text
   );
 
   return (
@@ -70,25 +78,25 @@ const App = () => {
             <NoteCategoryList
               title="🌱 Deep Focus"
               color="red"
-              notes={notes.filter((n) => n.category === "focus")}
+              notes={notes.filter((n) => n.category === "focus")} // ✅ Correctly filters by category
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="💡 Growth & Reflection"
               color="blue"
-              notes={notes.filter((n) => n.category === "growth")}
+              notes={notes.filter((n) => n.category === "growth")} // ✅ Correctly filters by category
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="🌊 Let it Flow"
               color="green"
-              notes={notes.filter((n) => n.category === "flow")}
+              notes={notes.filter((n) => n.category === "flow")} // ✅ Correctly filters by category
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="🌬️ Let it Go"
               color="gray"
-              notes={notes.filter((n) => n.category === "letgo")}
+              notes={notes.filter((n) => n.category === "letgo")} // ✅ Correctly filters by category
               onDelete={handleDeleteNote}
             />
           </div>
