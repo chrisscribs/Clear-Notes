@@ -17,19 +17,20 @@ const NoteCategoryList = ({
   const noteCount = notes.length;
 
   return (
-    <div className={`p-4 rounded-lg shadow-md bg-${color}-100`}>
+    <div className={`p-4 rounded-lg shadow-md bg-${color}-100 flex flex-col`}>
       <h2 className={`text-xl font-bold text-${color}-600 mb-2`}>
         {title} ({noteCount})
       </h2>
-      <div className="space-y-2">
+
+      <div className="flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-green-200">
         {notes.length > 0 ? (
           notes.map((note, index) => {
             const isMatch =
               searchQuery &&
               note.text.toLowerCase().includes(searchQuery.toLowerCase());
-
+              
             return (
-              <div key={index} className="flex items-center gap-2">
+              <div key={index} className="flex items-center gap-2 py-2">
                 {/* Note Box */}
                 <div
                   className={`flex-grow text-teal-900 p-2 bg-white shadow-md border border-teal-300 transition  ${
