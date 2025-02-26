@@ -8,7 +8,7 @@ import {
   doc,
 } from "firebase/firestore";
 import NoteInput from "./components/NoteInput";
-import Searchbar from "./components/Searchbar";
+import Searchbar from "./components/TopBar";
 import Footer from "./components/Footer";
 
 const App = () => {

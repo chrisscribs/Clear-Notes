@@ -60,7 +60,7 @@ const NoteInput = ({ onSave }: NoteInputProps) => {
         <button
           onClick={handleSave}
           id="saveTask"
-          className="px-5 py-2 bg-green-400 text-white font-semibold rounded-lg shadow-md hover:bg-green-400 hover:ring-2 hover:ring-1 hover:ring-green-400 focus:outline-none focus:ring-2 focus:ring-green-200 transition cursor-pointer"
+          className="px-5 py-2 bg-teal-700 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 hover:ring-2 hover:ring-1 hover:ring-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-200 transition cursor-pointer"
         >
           Save Note
         </button>
