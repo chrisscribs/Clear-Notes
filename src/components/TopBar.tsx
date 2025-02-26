@@ -13,9 +13,8 @@ const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <nav className="absolute top-0 w-full bg-green-400 py-3 shadow-md">
-      <div className="px-10 flex flex-wrap items-center justify-between">
-
+    <nav className="fixed top-0 w-full h-16 bg-green-400 py-3 shadow-md z-50">
+      <div className="px-10 flex flex-wrap items-center justify-between h-full">
         <img src={logo} alt="Clear Notes Logo" className="h-10" />
 
         <div className="flex h-10 gap-5">
