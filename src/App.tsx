@@ -61,10 +61,12 @@ const App = () => {
     }
   };
 
-  const filteredNotes = notes.filter(
-    (note) => note.text.toLowerCase().includes(searchQuery.toLowerCase()) // ✅ Use note.text
-  );
-
+  const filteredNotes = searchQuery
+    ? notes.map((note) => ({
+        ...note,
+        isMatch: note.text.toLowerCase().includes(searchQuery.toLowerCase()),
+      }))
+    : notes;
   return (
     <>
       <div className="flex flex-col min-h-screen bg-green-50">
@@ -78,25 +80,29 @@ const App = () => {
             <NoteCategoryList
               title="🌱 Deep Focus"
               color="red"
-              notes={notes.filter((n) => n.category === "focus")} // ✅ Correctly filters by category
+              notes={filteredNotes.filter((n) => n.category === "focus")} // ✅ Use filteredNotes
+              searchQuery={searchQuery}
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="💡 Growth & Reflection"
               color="blue"
-              notes={notes.filter((n) => n.category === "growth")} // ✅ Correctly filters by category
+              notes={filteredNotes.filter((n) => n.category === "growth")} // ✅ Use filteredNotes
+              searchQuery={searchQuery}
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="🌊 Let it Flow"
               color="green"
-              notes={notes.filter((n) => n.category === "flow")} // ✅ Correctly filters by category
+              notes={filteredNotes.filter((n) => n.category === "flow")} // ✅ Use filteredNotes
+              searchQuery={searchQuery}
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="🌬️ Let it Go"
               color="gray"
-              notes={notes.filter((n) => n.category === "letgo")} // ✅ Correctly filters by category
+              notes={filteredNotes.filter((n) => n.category === "letgo")} // ✅ Use filteredNotes
+              searchQuery={searchQuery}
               onDelete={handleDeleteNote}
             />
           </div>
