@@ -14,11 +14,13 @@ const NoteCategoryList = ({
   searchQuery,
   onDelete,
 }: NoteCategoryListProps) => {
-  // Function to highlight matching text
+  const noteCount = notes.length;
 
   return (
     <div className={`p-4 rounded-lg shadow-md bg-${color}-100`}>
-      <h2 className={`text-xl font-bold text-${color}-600 mb-2`}>{title}</h2>
+      <h2 className={`text-xl font-bold text-${color}-600 mb-2`}>
+        {title} ({noteCount})
+      </h2>
       <div className="space-y-2">
         {notes.length > 0 ? (
           notes.map((note, index) => {
