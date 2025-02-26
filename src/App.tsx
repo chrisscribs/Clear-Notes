@@ -53,40 +53,19 @@ const App = () => {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-green-50">
+      <div className="min-h-screen flex items-center justify-center bg-green-50 z-50">
         <TopBar
           onNewNote={() => setShowNoteInput(true)}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
         {showNoteInput && (
-          <NoteInput
-            onSave={handleSaveNote}
-            onClose={() => setShowNoteInput(false)}
-          />
-
-          // <div className="mt-4 space-y-2">
-          //   {filteredNotes.length > 0 ? (
-          //     filteredNotes.map((note, index) => (
-          //       <div
-          //         key={index}
-          //         className="p-3 bg-green-100 border border-green-200 rounded-lg flex justify-between"
-          //       >
-          //         <p className="text-teal-700">{note}</p>
-          //         <button
-          //           onClick={() => handleDeleteNote(index)}
-          //           className="text-teal-500 hover:text-teal-700 cursor-pointer"
-          //         >
-          //           ✖
-          //         </button>
-          //       </div>
-          //     ))
-          //   ) : (
-          //     <p className="text-gray-500 text-center">
-          //       There are no notes here. <br /> What else is on your mind?
-          //     </p>
-          //   )}
-          // </div>
+          <div className="fixed inset-0 flex justify-center items-center bg-black/75 z-50">
+            <NoteInput
+              onSave={handleSaveNote}
+              onClose={() => setShowNoteInput(false)}
+            />
+          </div>
         )}
       </div>
       <Footer />
