@@ -78,25 +78,29 @@ const App = () => {
             <NoteCategoryList
               title="🌱 Deep Focus"
               color="red"
-              notes={notes.filter((n) => n.category === "focus")} // ✅ Correctly filters by category
+              notes={notes.filter((n) => n.category === "focus")} // ✅ No filtering by search here
+              searchQuery={searchQuery} // ✅ Pass search query
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="💡 Growth & Reflection"
               color="blue"
-              notes={notes.filter((n) => n.category === "growth")} // ✅ Correctly filters by category
+              notes={notes.filter((n) => n.category === "growth")}
+              searchQuery={searchQuery}
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="🌊 Let it Flow"
               color="green"
-              notes={notes.filter((n) => n.category === "flow")} // ✅ Correctly filters by category
+              notes={notes.filter((n) => n.category === "flow")}
+              searchQuery={searchQuery}
               onDelete={handleDeleteNote}
             />
             <NoteCategoryList
               title="🌬️ Let it Go"
               color="gray"
-              notes={notes.filter((n) => n.category === "letgo")} // ✅ Correctly filters by category
+              notes={notes.filter((n) => n.category === "letgo")}
+              searchQuery={searchQuery}
               onDelete={handleDeleteNote}
             />
           </div>

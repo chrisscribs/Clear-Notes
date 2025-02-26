@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 
 interface NoteInputProps {
-  onSave: (note: string) => void;
+  onSave: (note: string, category: string) => void;
   onClose: () => void;
 }
 

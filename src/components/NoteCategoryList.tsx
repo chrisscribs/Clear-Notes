@@ -1,44 +1,52 @@
+import { FaTrash } from "react-icons/fa";
 interface NoteCategoryListProps {
   title: string;
   color: string;
   notes: { text: string; category: string }[];
+  searchQuery: string; // ✅ New prop
   onDelete: (text: string) => void;
 }
-
-const colorClasses: Record<string, string> = {
-  red: "border-red-300 bg-red-100 text-red-700",
-  blue: "border-blue-300 bg-blue-100 text-blue-700",
-  green: "border-green-300 bg-green-100 text-green-700",
-  gray: "border-gray-300 bg-gray-100 text-gray-700",
-};
 
 const NoteCategoryList = ({
   title,
   color,
   notes,
+  searchQuery,
   onDelete,
 }: NoteCategoryListProps) => {
+  // Function to highlight matching text
+
   return (
-    <div
-      className={`flex flex-col p-4 rounded-lg shadow-md ${colorClasses[color]} min-h-48`}
-    >
-      <h2 className="text-xl font-bold text-${color}-600 mb-2">{title}</h2>
-      <div className="flex-grow overflow-y-auto space-y-2">
+    <div className={`p-4 rounded-lg shadow-md bg-${color}-100`}>
+      <h2 className={`text-xl font-bold text-${color}-600 mb-2`}>{title}</h2>
+      <div className="space-y-2">
         {notes.length > 0 ? (
-          notes.map((note, index) => (
-            <div
-              key={index}
-              className={`p-3 rounded-lg flex justify-between bg-opacity-75 ${colorClasses[color]}`}
-            >
-              <p>{note.text}</p>
-              <button
-                onClick={() => onDelete(note.text)}
-                className="text-red-500 hover:text-red-700"
-              >
-                ✖
-              </button>
-            </div>
-          ))
+          notes.map((note, index) => {
+            const isMatch =
+              searchQuery &&
+              note.text.toLowerCase().includes(searchQuery.toLowerCase());
+
+            return (
+              <div key={index} className="flex items-center gap-2">
+                {/* Note Box */}
+                <div
+                  className={`flex-grow text-teal-900 p-2 bg-white shadow-md border border-teal-300 transition  ${
+                    isMatch ? "bg-yellow-300/75" : `bg-${color}-200`
+                  }`}
+                >
+                  <p>{note.text}</p>
+                </div>
+
+                {/* Delete Button (Outside the Box) */}
+                <button
+                  onClick={() => onDelete(note.text)}
+                  className="text-teal-700 hover:text-red-700 px-1 transition cursor-pointer"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+            );
+          })
         ) : (
           <p className="text-gray-500">No notes yet.</p>
         )}
