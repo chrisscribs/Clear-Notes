@@ -2,9 +2,10 @@ import { useEffect, useState, useMemo } from "react";
 
 interface NoteInputProps {
   onSave: (note: string) => void;
+  onClose: () => void;
 }
 
-const NoteInput = ({ onSave }: NoteInputProps) => {
+const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
   const placeholders = useMemo(
     () => [
       "Clear your mind...",
@@ -45,10 +46,23 @@ const NoteInput = ({ onSave }: NoteInputProps) => {
     setPlaceholder(
       placeholders[Math.floor(Math.random() * placeholders.length)]
     );
+    onClose();
   };
 
   return (
-    <>
+    <div className="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg border border-green-200 relative">
+      {/* Close Button (Top Right) */}
+      <button
+        onClick={onClose}
+        className="absolute p-2 top-2 right-4 text-teal-700 hover:text-red-500 text-lg p-2 transition cursor-pointer"
+      >
+        ✖
+      </button>
+
+      <h1 className="text-3xl font-semibold text-teal-700 text-center mb-4">
+        Clear Notes
+      </h1>
+
       <textarea
         className="w-full p-3 border bg-white border-green-300 rounded-lg text-teal-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent resize-none h-32"
         placeholder={placeholder}
@@ -56,6 +70,7 @@ const NoteInput = ({ onSave }: NoteInputProps) => {
         onChange={(e) => setNote(e.target.value)}
         onKeyDown={handleKeyDown}
       />
+
       <div className="flex justify-center mt-4">
         <button
           onClick={handleSave}
@@ -65,7 +80,7 @@ const NoteInput = ({ onSave }: NoteInputProps) => {
           Save Note
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
