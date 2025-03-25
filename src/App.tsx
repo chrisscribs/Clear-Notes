@@ -5,8 +5,12 @@ import TopBar from "./components/TopBar";
 import Footer from "./components/Footer";
 import NoteCategoryList from "./components/NoteCategoryList";
 import { NoteCategories } from "./data/noteCategories";
+import { useAuth } from "./context/AuthContext";
+import Login from "./pages/Login";
 
 const App = () => {
+  const { user } = useAuth();
+
   const { notes, addNote, deleteNote, editNote } = useNotes();
   const [searchQuery, setSearchQuery] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
@@ -17,6 +21,8 @@ const App = () => {
         isMatch: note.text.toLowerCase().includes(searchQuery.toLowerCase()),
       }))
     : notes;
+
+  if (!user) return <Login />;
 
   return (
     <>
