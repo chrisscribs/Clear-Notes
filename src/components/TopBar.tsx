@@ -6,7 +6,7 @@ import logo from "../assets/clearnotes-logo-white.png";
 interface TopBarProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  onNewNote: () => void; // New prop for opening NoteInput
+  onNewNote: () => void; 
 }
 
 const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
