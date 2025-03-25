@@ -49,9 +49,9 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
 
   const handleSave = () => {
     if (note.trim() === "") return;
-    onSave(note, selectedCategory); // ✅ Pass both note text and selected category
+    onSave(note, selectedCategory);
     setNote("");
-    setSelectedCategory("focus"); // ✅ Reset category after saving
+    setSelectedCategory("focus");
     setPlaceholder(
       placeholders[Math.floor(Math.random() * placeholders.length)]
     );
@@ -63,7 +63,7 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
       {/* Close Button (Top Right) */}
       <button
         onClick={onClose}
-        className="absolute p-2 top-2 right-4 text-teal-700 hover:text-red-500 text-lg p-2 transition cursor-pointer"
+        className="absolute p-2 top-2 right-4 text-teal-700 hover:text-red-500 text-lg transition cursor-pointer"
       >
         ✖
       </button>
@@ -105,7 +105,7 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
         <button
           onClick={handleSave}
           id="saveTask"
-          className="px-5 py-2 bg-teal-700 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 hover:ring-2 hover:ring-1 hover:ring-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-200 transition cursor-pointer"
+          className="px-5 py-2 bg-teal-700 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 hover:ring-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-200 transition cursor-pointer"
         >
           Save Note
         </button>
