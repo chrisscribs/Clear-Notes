@@ -5,10 +5,18 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
-const AuthContext = createContext<{ user: User | null }>({ user: null });
+interface AuthContextType {
+  user: User | null;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  logout: () => {},
+});
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -18,8 +26,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return unsubscribe;
   }, []);
 
+  const logout = () => {
+    signOut(auth);
+  };
+
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
