@@ -3,6 +3,8 @@ import { auth } from "../firebaseConfig";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth";
 
 const Login = () => {
@@ -10,6 +12,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true); // toggle login/signup
   const [error, setError] = useState("");
+
+  const provider = new GoogleAuthProvider();
 
   const handleSubmit = async () => {
     setError("");
@@ -20,6 +24,14 @@ const Login = () => {
         await createUserWithEmailAndPassword(auth, email, password);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithPopup(auth, provider);
     } catch (err: any) {
       setError(err.message);
     }
@@ -56,6 +68,17 @@ const Login = () => {
         onClick={() => setIsLogin(!isLogin)}
       >
         {isLogin ? "Don't have an account? Sign up" : "Have an account? Login"}
+      </button>
+      <button
+        className="bg-white border text-gray-700 px-4 py-2 rounded w-full flex items-center justify-center gap-2 mt-2 shadow hover:bg-gray-50"
+        onClick={handleGoogleLogin}
+      >
+        <img
+          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          alt="Google logo"
+          className="w-5 h-5"
+        />
+        Sign in with Google
       </button>
     </div>
   );
