@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaTrash, FaEdit, FaSave } from "react-icons/fa";
+import { FaTrash, FaEdit, FaSave, FaGripVertical } from "react-icons/fa";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
@@ -27,7 +27,6 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-    cursor: "grab",
   };
 
   const handleSave = () => {
@@ -40,8 +39,6 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
   return (
     <div
       ref={setNodeRef}
-      {...attributes}
-      {...listeners}
       style={style}
       className="flex items-center gap-2 py-2"
     >
@@ -59,7 +56,16 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
             isMatch ? "bg-yellow-300/75" : "bg-white"
           }`}
         >
-          <p>{note.text}</p>
+          <div className="flex">
+            <div
+              {...attributes}
+              {...listeners}
+              className="mr-2 cursor-grab text-gray-400 hover:text-gray-600 px-1"
+            >
+              <FaGripVertical />
+            </div>
+            <p>{note.text}</p>
+          </div>
         </div>
       )}
 
