@@ -18,6 +18,7 @@ import {
 import { arrayMove } from "@dnd-kit/sortable";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
+import { DragOverlay } from "@dnd-kit/core";
 
 const App = () => {
   const { user } = useAuth();
@@ -25,6 +26,10 @@ const App = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
+  const [activeNote, setActiveNote] = useState<{
+    text: string;
+    category: string;
+  } | null>(null);
 
   const filteredNotes = searchQuery
     ? notes.map((note) => ({
@@ -39,18 +44,22 @@ const App = () => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    const activeNote = notes.find((n) => n.text === active.id);
-    const overNote = notes.find((n) => n.text === over.id);
+    const activeId = String(active.id); // 👈 cast to string
+    const overId = String(over.id); // 👈 cast to string
 
-    if (!activeNote || !overNote) return;
+    const activeNote = notes.find((n) => n.text === activeId);
+    if (!activeNote) return;
 
-    if (activeNote.category === overNote.category) {
+    const overNote = notes.find((n) => n.text === overId);
+    const categoryKeys = NoteCategories.map((cat) => cat.key);
+
+    if (overNote && activeNote.category === overNote.category) {
       const categoryNotes = notes.filter(
         (n) => n.category === activeNote.category
       );
 
-      const oldIndex = categoryNotes.findIndex((n) => n.text === active.id);
-      const newIndex = categoryNotes.findIndex((n) => n.text === over.id);
+      const oldIndex = categoryNotes.findIndex((n) => n.text === activeId);
+      const newIndex = categoryNotes.findIndex((n) => n.text === overId);
 
       const reordered = arrayMove(categoryNotes, oldIndex, newIndex);
 
@@ -60,28 +69,34 @@ const App = () => {
       ];
 
       setNotes(updatedNotes);
-    } else {
+    } else if (overNote && activeNote.category !== overNote.category) {
       const updatedNotes = notes.map((note) =>
-        note.text === active.id
-          ? { ...note, category: overNote.category }
-          : note
+        note.text === activeId ? { ...note, category: overNote.category } : note
       );
-
       setNotes(updatedNotes);
-
-      const updateCategory = async () => {
-        const snapshot = await getDocs(collection(db, "notes"));
-        const docToUpdate = snapshot.docs.find(
-          (doc) => doc.data().text === active.id
-        );
-        if (docToUpdate) {
-          await updateDoc(doc(db, "notes", docToUpdate.id), {
-            category: overNote.category,
-          });
-        }
-      };
-      updateCategory();
+      updateCategoryInFirestore(activeId, overNote.category);
+    } else if (categoryKeys.includes(overId)) {
+      const updatedNotes = notes.map((note) =>
+        note.text === activeId ? { ...note, category: overId } : note
+      );
+      setNotes(updatedNotes);
+      updateCategoryInFirestore(activeId, overId);
     }
+  };
+  const updateCategoryInFirestore = async (
+    noteText: string,
+    newCategory: string
+  ) => {
+    const snapshot = await getDocs(collection(db, "notes"));
+    const docToUpdate = snapshot.docs.find(
+      (doc) => doc.data().text === noteText
+    );
+    if (docToUpdate) {
+      await updateDoc(doc(db, "notes", docToUpdate.id), {
+        category: newCategory,
+      });
+    }
+    setActiveNote(null);
   };
 
   if (!user) return <Login />;
@@ -98,7 +113,14 @@ const App = () => {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
+          onDragStart={(event) => {
+            const dragged = notes.find((n) => n.text === event.active.id);
+            if (dragged) setActiveNote(dragged);
+          }}
+          onDragEnd={(event) => {
+            handleDragEnd(event);
+            setActiveNote(null); // 👈 Clear overlay when done
+          }}
         >
           <div className="flex flex-col min-h-screen bg-green-50 pt-16">
             <div className="grid grid-cols-2 grid-rows-2 gap-4 p-6 bg-green-50 h-[90vh]">
@@ -119,6 +141,14 @@ const App = () => {
               ))}
             </div>
           </div>
+
+          <DragOverlay>
+            {activeNote ? (
+              <div className="p-2 bg-white shadow-lg rounded w-full max-w-sm text-gray-800">
+                <p>{activeNote.text}</p>
+              </div>
+            ) : null}
+          </DragOverlay>
         </DndContext>
 
         {showNoteInput && (
