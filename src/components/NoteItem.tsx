@@ -6,12 +6,22 @@ import { CSS } from "@dnd-kit/utilities";
 interface NoteItemProps {
   note: { text: string; category: string };
   isMatch: boolean;
+  isEditing: boolean;
+  onStartEdit: () => void;
+  onStopEdit: () => void;
   onDelete: (text: string) => void;
   onEdit: (oldText: string, newText: string) => void;
 }
 
-const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
-  const [editing, setEditing] = useState(false);
+const NoteItem = ({
+  note,
+  isMatch,
+  isEditing,
+  onStartEdit,
+  onStopEdit,
+  onDelete,
+  onEdit,
+}: NoteItemProps) => {
   const [editText, setEditText] = useState(note.text);
 
   const {
@@ -32,7 +42,7 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
   const handleSave = () => {
     if (editText.trim()) {
       onEdit(note.text, editText);
-      setEditing(false);
+      onStopEdit();
     }
   };
 
@@ -42,7 +52,7 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
       style={style}
       className="flex items-center gap-2 py-2"
     >
-      {editing ? (
+      {isEditing ? (
         <input
           type="text"
           value={editText}
@@ -69,7 +79,7 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
         </div>
       )}
 
-      {editing ? (
+      {isEditing ? (
         <button
           onClick={handleSave}
           className="text-teal-700 hover:text-green-700 px-2"
@@ -79,7 +89,7 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
       ) : (
         <>
           <button
-            onClick={() => setEditing(true)}
+            onClick={onStartEdit}
             className="text-gray-600 hover:text-blue-700 px-2"
           >
             <FaEdit />

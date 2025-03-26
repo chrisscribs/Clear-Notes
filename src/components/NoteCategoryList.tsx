@@ -1,6 +1,7 @@
 import NoteItem from "./NoteItem";
 import EmptyCategoryMessage from "./EmptyCategoryMessage";
 import { useDroppable } from "@dnd-kit/core";
+import { useState } from "react";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -45,6 +46,7 @@ const NoteCategoryList = ({
 }: NoteCategoryListProps) => {
   const noteCount = notes.length;
   const { setNodeRef } = useDroppable({ id: categoryKey });
+  const [currentlyEditing, setCurrentlyEditing] = useState<string | null>(null);
 
   return (
     <div
@@ -88,6 +90,9 @@ const NoteCategoryList = ({
                 }
                 onDelete={onDelete}
                 onEdit={onEdit}
+                isEditing={currentlyEditing === note.text}
+                onStartEdit={() => setCurrentlyEditing(note.text)}
+                onStopEdit={() => setCurrentlyEditing(null)}
               />
             ))
           ) : (
