@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { FaSearch, FaUser } from "react-icons/fa";
-import { IoIosAddCircle } from "react-icons/io";
+import { IoIosAddCircle, IoIosLogOut } from "react-icons/io";
 import logo from "../assets/clearnotes-logo-white.png";
 import { useAuth } from "../context/AuthContext";
+import Button from "./Button";
 
 interface TopBarProps {
   searchQuery: string;
@@ -38,25 +39,32 @@ const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
               className="w-full bg-transparent focus:outline-none"
             />
           </div>
-          <button
+          <Button
             onClick={onNewNote}
-            className="flex gap-2 px-5 py-2 bg-teal-700 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 hover:ring-2 hover:ring-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-200 transition cursor-pointer"
+            icon={<IoIosAddCircle className="size-6" />}
+            color={"teal"}
           >
-            <IoIosAddCircle className="size-6" />
             New
-          </button>
+          </Button>
         </div>
 
         <div className="flex gap-4">
-          <button className="text-white p-0">
+          <button className="text-white p-0 mr-4">
             <FaUser className="size-6" />
           </button>
-          <button
+          <Button
+            onClick={logout}
+            icon={<IoIosLogOut className="size-6" />}
+            color="red"
+          >
+            Logout
+          </Button>
+          {/* <button
             onClick={logout}
             className="text-sm px-5 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:underline"
           >
             Logout
-          </button>
+          </button> */}
         </div>
       </div>
     </nav>
