@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { FaTrash, FaEdit, FaSave } from "react-icons/fa";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface NoteItemProps {
   note: { text: string; category: string };
@@ -12,6 +14,22 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(note.text);
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: note.text });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    cursor: "grab",
+  };
+
   const handleSave = () => {
     if (editText.trim()) {
       onEdit(note.text, editText);
@@ -20,7 +38,13 @@ const NoteItem = ({ note, isMatch, onDelete, onEdit }: NoteItemProps) => {
   };
 
   return (
-    <div className="flex items-center gap-2 py-2">
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      className="flex items-center gap-2 py-2"
+    >
       {editing ? (
         <input
           type="text"

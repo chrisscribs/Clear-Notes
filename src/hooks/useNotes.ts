@@ -84,5 +84,5 @@ export const useNotes = () => {
     }
   };
 
-  return { notes, addNote, deleteNote, editNote };
+  return { notes, setNotes, addNote, deleteNote, editNote };
 };
