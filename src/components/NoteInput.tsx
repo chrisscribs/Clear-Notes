@@ -72,7 +72,7 @@ const NoteInput = ({ onSave, onClose, defaultCategory }: NoteInputProps) => {
       </button>
 
       <h1 className="text-3xl font-semibold text-teal-700 text-center mb-4">
-        Clear Notes.
+        Add a note.
       </h1>
 
       <textarea
