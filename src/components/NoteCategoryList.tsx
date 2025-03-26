@@ -5,9 +5,10 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { IoIosAddCircle } from "react-icons/io";
 
 interface NoteCategoryListProps {
-  categoryKey: string; // ✅ required for drop zone
+  categoryKey: string;
   title: string;
   color: string;
   description: string;
@@ -15,6 +16,7 @@ interface NoteCategoryListProps {
   searchQuery: string;
   onDelete: (text: string) => void;
   onEdit: (oldText: string, newText: string) => void;
+  onAdd: (categoryKey: string) => void;
 }
 
 const colorClasses: {
@@ -39,9 +41,10 @@ const NoteCategoryList = ({
   searchQuery,
   onDelete,
   onEdit,
+  onAdd,
 }: NoteCategoryListProps) => {
   const noteCount = notes.length;
-  const { setNodeRef } = useDroppable({ id: categoryKey }); // ✅ droppable zone
+  const { setNodeRef } = useDroppable({ id: categoryKey });
 
   return (
     <div
@@ -50,13 +53,23 @@ const NoteCategoryList = ({
         colorClasses[color]?.bg || "bg-gray-100"
       } ${colorClasses[color]?.border || "border-gray-300"}`}
     >
-      <h2
-        className={`text-xl font-bold ${
-          colorClasses[color]?.text || "text-gray-600"
-        } mb-2`}
-      >
-        {title} ({noteCount})
-      </h2>
+      <div className="flex justify-between items-center mb-2">
+        <h2
+          className={`text-xl font-bold ${
+            colorClasses[color]?.text || "text-gray-600"
+          }`}
+        >
+          {title} ({noteCount})
+        </h2>
+
+        <button
+          onClick={() => onAdd(categoryKey)}
+          className="flex items-center gap-1 px-2 py-1 text-sm font-medium text-white bg-teal-600 rounded hover:bg-teal-500 shadow"
+        >
+          <IoIosAddCircle className="text-white" />
+          Add
+        </button>
+      </div>
 
       <div className="flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-green-200">
         <SortableContext

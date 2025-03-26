@@ -19,6 +19,7 @@ const App = () => {
     text: string;
     category: string;
   } | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const filteredNotes = searchQuery
     ? notes.map((note) => ({
@@ -44,16 +45,28 @@ const App = () => {
       >
         <NotesGrid
           notes={filteredNotes}
+          searchQuery={searchQuery}
           onDelete={deleteNote}
           onEdit={editNote}
-          searchQuery={searchQuery}
+          onAdd={(categoryKey) => {
+            setSelectedCategory(categoryKey);
+            setShowNoteInput(true);
+          }}
         />
+
         <DragLayer activeNote={activeNote} />
       </DragHandlers>
 
       {showNoteInput && (
         <div className="fixed inset-0 flex justify-center items-center bg-black/75 z-50">
-          <NoteInput onSave={addNote} onClose={() => setShowNoteInput(false)} />
+          <NoteInput
+            onSave={addNote}
+            onClose={() => {
+              setShowNoteInput(false);
+              setSelectedCategory(null);
+            }}
+            defaultCategory={selectedCategory}
+          />
         </div>
       )}
 

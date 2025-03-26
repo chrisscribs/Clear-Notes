@@ -6,9 +6,10 @@ interface Props {
   searchQuery: string;
   onDelete: (text: string) => void;
   onEdit: (oldText: string, newText: string) => void;
+  onAdd: (categoryKey: string) => void;
 }
 
-const NotesGrid = ({ notes, searchQuery, onDelete, onEdit }: Props) => {
+const NotesGrid = ({ notes, searchQuery, onDelete, onEdit, onAdd }: Props) => {
   return (
     <div className="flex flex-col min-h-screen bg-green-50 pt-16">
       <div className="grid grid-cols-2 grid-rows-2 gap-4 p-6 bg-green-50 h-[90vh]">
@@ -23,6 +24,7 @@ const NotesGrid = ({ notes, searchQuery, onDelete, onEdit }: Props) => {
             searchQuery={searchQuery}
             onDelete={onDelete}
             onEdit={onEdit}
+            onAdd={onAdd}
           />
         ))}
       </div>
