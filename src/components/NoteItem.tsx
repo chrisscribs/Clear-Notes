@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaTrash, FaEdit, FaSave, FaGripVertical } from "react-icons/fa";
+import { FaTrash, FaSave, FaGripVertical } from "react-icons/fa";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
@@ -65,6 +65,7 @@ const NoteItem = ({
           className={`flex-grow p-2 transition shadow-sm ${
             isMatch ? "bg-yellow-300/75" : "bg-white"
           }`}
+          onClick={onStartEdit}
         >
           <div className="flex">
             <div
@@ -87,20 +88,12 @@ const NoteItem = ({
           <FaSave />
         </button>
       ) : (
-        <>
-          <button
-            onClick={onStartEdit}
-            className="text-gray-600 hover:text-blue-700 px-2"
-          >
-            <FaEdit />
-          </button>
-          <button
-            onClick={() => onDelete(note.text)}
-            className="text-red-600 hover:text-red-700 px-2"
-          >
-            <FaTrash />
-          </button>
-        </>
+        <button
+          onClick={() => onDelete(note.text)}
+          className="text-red-600 hover:text-red-700 px-2"
+        >
+          <FaTrash />
+        </button>
       )}
     </div>
   );
