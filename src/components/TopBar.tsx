@@ -2,16 +2,18 @@ import { useState } from "react";
 import { FaSearch, FaUser } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import logo from "../assets/clearnotes-logo-white.png";
+import { useAuth } from "../context/AuthContext";
 
 interface TopBarProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  onNewNote: () => void; 
+  onNewNote: () => void;
 }
 
 const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
+  const { logout } = useAuth();
   return (
     <nav className="fixed top-0 w-full h-16 bg-green-400 py-3 shadow-md z-50">
       <div className="px-10 flex flex-wrap items-center justify-between h-full">
@@ -45,9 +47,17 @@ const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
           </button>
         </div>
 
-        <button className="text-white p-0">
-          <FaUser className="size-6" />
-        </button>
+        <div className="flex gap-4">
+          <button className="text-white p-0">
+            <FaUser className="size-6" />
+          </button>
+          <button
+            onClick={logout}
+            className="text-sm px-5 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:underline"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </nav>
   );

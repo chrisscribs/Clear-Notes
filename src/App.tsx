@@ -1,15 +1,24 @@
 import { useState } from "react";
 import { useNotes } from "./hooks/useNotes";
-import NoteInput from "./components/NoteInput";
+import { useAuth } from "./context/AuthContext";
+import Login from "./pages/Login";
 import TopBar from "./components/TopBar";
 import Footer from "./components/Footer";
-import NoteCategoryList from "./components/NoteCategoryList";
-import { NoteCategories } from "./data/noteCategories";
+import NoteInput from "./components/NoteInput";
+import NotesGrid from "./components/NotesGrid";
+import DragLayer from "./components/DragLayer";
+import DragHandlers from "./components/DragHandlers";
 
 const App = () => {
-  const { notes, addNote, deleteNote, editNote } = useNotes();
+  const { user } = useAuth();
+  const { notes, setNotes, addNote, deleteNote, editNote } = useNotes();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [showNoteInput, setShowNoteInput] = useState(false);
+  const [activeNote, setActiveNote] = useState<{
+    text: string;
+    category: string;
+  } | null>(null);
 
   const filteredNotes = searchQuery
     ? notes.map((note) => ({
@@ -18,42 +27,38 @@ const App = () => {
       }))
     : notes;
 
-  return (
-    <>
-      <div className="flex flex-col min-h-screen bg-green-50">
-        <TopBar
-          onNewNote={() => setShowNoteInput(true)}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-        <div className="flex flex-col min-h-screen bg-green-50 pt-16">
-          <div className="grid grid-cols-2 grid-rows-2 gap-4 p-6 bg-green-50 h-[90vh]">
-            {NoteCategories.map((category) => (
-              <NoteCategoryList
-                key={category.key}
-                title={category.title}
-                color={category.color}
-                description={category.description}
-                notes={filteredNotes.filter((n) => n.category === category.key)}
-                searchQuery={searchQuery}
-                onDelete={deleteNote}
-                onEdit={editNote}
-              />
-            ))}
-          </div>
-        </div>
+  if (!user) return <Login />;
 
-        {showNoteInput && (
-          <div className="fixed inset-0 flex justify-center items-center bg-black/75 z-50">
-            <NoteInput
-              onSave={addNote}
-              onClose={() => setShowNoteInput(false)}
-            />
-          </div>
-        )}
-      </div>
+  return (
+    <div className="flex flex-col min-h-screen bg-green-50">
+      <TopBar
+        onNewNote={() => setShowNoteInput(true)}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
+
+      <DragHandlers
+        notes={notes}
+        setNotes={setNotes}
+        setActiveNote={setActiveNote}
+      >
+        <NotesGrid
+          notes={filteredNotes}
+          onDelete={deleteNote}
+          onEdit={editNote}
+          searchQuery={searchQuery}
+        />
+        <DragLayer activeNote={activeNote} />
+      </DragHandlers>
+
+      {showNoteInput && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black/75 z-50">
+          <NoteInput onSave={addNote} onClose={() => setShowNoteInput(false)} />
+        </div>
+      )}
+
       <Footer />
-    </>
+    </div>
   );
 };
 
