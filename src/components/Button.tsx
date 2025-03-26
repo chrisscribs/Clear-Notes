@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 interface ButtonProps {
   onClick: () => void;
   icon?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   color?: "teal" | "red" | "blue" | "gray";
 }
 
@@ -36,7 +36,7 @@ const Button = ({ onClick, icon, children, color }: ButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className={`flex gap-2 px-5 py-2 text-white font-semibold rounded-lg shadow-md transition cursor-pointer ${styles.bg} ${styles.hover} focus:outline-none focus:ring-2 ${styles.ring}`}
+      className={`flex cursor-pointer gap-2 px-5 py-2 text-white font-semibold rounded-lg shadow-md transition ${styles.bg} ${styles.hover} focus:outline-none focus:ring-2 ${styles.ring}`}
     >
       {icon && <span className="text-lg">{icon}</span>}
       {children}

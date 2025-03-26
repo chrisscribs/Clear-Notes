@@ -71,7 +71,7 @@ const NoteItem = ({
             <div
               {...attributes}
               {...listeners}
-              className="mr-2 cursor-grab text-gray-400 hover:text-gray-600 px-1"
+              className="mr-2 content-center cursor-grab text-gray-400 hover:text-gray-600 px-1"
             >
               <FaGripVertical />
             </div>

@@ -7,6 +7,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { IoIosAddCircle } from "react-icons/io";
+import Button from "./Button";
 
 interface NoteCategoryListProps {
   categoryKey: string;
@@ -64,12 +65,10 @@ const NoteCategoryList = ({
           {title} ({noteCount})
         </h2>
 
-        <button
+        <Button
           onClick={() => onAdd(categoryKey)}
-          className="flex items-center gap-1 px-2 py-1 text-sm font-medium text-white bg-teal-600 rounded hover:bg-teal-500 shadow"
-        >
-          <IoIosAddCircle className="text-white size-6 mx-2" />
-        </button>
+          icon={<IoIosAddCircle className="text-white size-6" />}
+        />
       </div>
 
       <div className="flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-green-200">
