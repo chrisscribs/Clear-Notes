@@ -12,7 +12,7 @@ interface Props {
 const NotesGrid = ({ notes, searchQuery, onDelete, onEdit, onAdd }: Props) => {
   return (
     <div className="flex flex-col min-h-screen bg-green-50 pt-16">
-      <div className="grid grid-cols-2 grid-rows-2 gap-4 p-6 bg-green-50 h-[90vh]">
+      <div className="grid lg:grid-cols-2 lg:grid-rows-2 gap-4 p-6 bg-green-50 h-[90vh]">
         {NoteCategories.map((category) => (
           <NoteCategoryList
             key={category.key}

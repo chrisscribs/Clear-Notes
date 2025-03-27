@@ -18,7 +18,10 @@ const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
   return (
     <nav className="fixed top-0 w-full h-16 bg-green-400 py-3 shadow-md z-50">
       <div className="px-10 flex flex-wrap items-center justify-between h-full">
-        <img src={logo} alt="Clear Notes Logo" className="h-10" />
+        <button className="flex content-center">
+          <img src={logo} alt="Clear Notes Logo" className="h-10" />
+          <span className="hidden lg:inline text-white">Clear Notes.</span>
+        </button>
 
         <div className="flex h-10 gap-5">
           <div
@@ -57,14 +60,8 @@ const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
             icon={<IoIosLogOut className="size-6" />}
             color="red"
           >
-            Logout
+            <span className="hidden lg:inline">Logout</span>
           </Button>
-          {/* <button
-            onClick={logout}
-            className="text-sm px-5 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:underline"
-          >
-            Logout
-          </button> */}
         </div>
       </div>
     </nav>

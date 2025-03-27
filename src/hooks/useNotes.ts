@@ -10,7 +10,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { useAuth } from "../context/AuthContext"; // 👈 import auth hook
+import { useAuth } from "../context/AuthContext";
 
 interface Note {
   text: string;
@@ -19,14 +19,14 @@ interface Note {
 }
 
 export const useNotes = () => {
-  const { user } = useAuth(); // 👈 get current user
+  const { user } = useAuth();
   const [notes, setNotes] = useState<Note[]>([]);
   const notesCollectionRef = collection(db, "notes");
 
   const fetchNotes = async () => {
     if (!user) return;
 
-    const q = query(notesCollectionRef, where("uid", "==", user.uid)); // 👈 only get notes for this user
+    const q = query(notesCollectionRef, where("uid", "==", user.uid));
     const querySnapshot = await getDocs(q);
     const notesData = querySnapshot.docs.map((doc) => doc.data() as Note);
     setNotes(notesData);
@@ -34,7 +34,6 @@ export const useNotes = () => {
 
   useEffect(() => {
     fetchNotes();
-    // 👇 re-fetch when user changes
   }, [user]);
 
   const addNote = async (text: string, category: string) => {
