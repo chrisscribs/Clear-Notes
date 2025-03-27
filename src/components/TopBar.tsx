@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { FaSearch, FaUser } from "react-icons/fa";
-import { IoIosAddCircle, IoIosLogOut } from "react-icons/io";
+import { FaSearch } from "react-icons/fa";
+import { IoIosAddCircle } from "react-icons/io";
 import logo from "../assets/clearnotes-logo-white.png";
 import { useAuth } from "../context/AuthContext";
 import Button from "./Button";
+import UserMenuDropdown from "./UserMenuDropdown";
 
 interface TopBarProps {
   searchQuery: string;
@@ -52,16 +53,7 @@ const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
         </div>
 
         <div className="flex gap-4">
-          <button className="text-white p-0 mr-4">
-            <FaUser className="size-6" />
-          </button>
-          <Button
-            onClick={logout}
-            icon={<IoIosLogOut className="size-6" />}
-            color="red"
-          >
-            <span className="hidden lg:inline">Logout</span>
-          </Button>
+          <UserMenuDropdown onLogout={logout} />
         </div>
       </div>
     </nav>
