@@ -1,11 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
 
 interface NoteInputProps {
-  onSave: (note: string, category: string) => void;
+  onSave: (text: string, category: string) => void;
   onClose: () => void;
+  defaultCategory?: string | null;
 }
 
-const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
+const NoteInput = ({ onSave, onClose, defaultCategory }: NoteInputProps) => {
   const placeholders = useMemo(
     () => [
       "Clear your mind...",
@@ -32,7 +33,9 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
 
   const [placeholder, setPlaceholder] = useState("");
   const [note, setNote] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("focus");
+  const [selectedCategory, setSelectedCategory] = useState(
+    defaultCategory || "focus"
+  );
 
   useEffect(() => {
     setPlaceholder(
@@ -69,7 +72,7 @@ const NoteInput = ({ onSave, onClose }: NoteInputProps) => {
       </button>
 
       <h1 className="text-3xl font-semibold text-teal-700 text-center mb-4">
-        Clear Notes.
+        Add a note.
       </h1>
 
       <textarea

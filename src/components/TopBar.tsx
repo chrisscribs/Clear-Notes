@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { FaSearch, FaUser } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import logo from "../assets/clearnotes-logo-white.png";
 import { useAuth } from "../context/AuthContext";
+import Button from "./Button";
+import UserMenuDropdown from "./UserMenuDropdown";
 
 interface TopBarProps {
   searchQuery: string;
@@ -17,7 +19,10 @@ const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
   return (
     <nav className="fixed top-0 w-full h-16 bg-green-400 py-3 shadow-md z-50">
       <div className="px-10 flex flex-wrap items-center justify-between h-full">
-        <img src={logo} alt="Clear Notes Logo" className="h-10" />
+        <button className="flex content-center">
+          <img src={logo} alt="Clear Notes Logo" className="h-10" />
+          <span className="hidden lg:inline text-white">Clear Notes.</span>
+        </button>
 
         <div className="flex h-10 gap-5">
           <div
@@ -38,25 +43,17 @@ const TopBar = ({ searchQuery, setSearchQuery, onNewNote }: TopBarProps) => {
               className="w-full bg-transparent focus:outline-none"
             />
           </div>
-          <button
+          <Button
             onClick={onNewNote}
-            className="flex gap-2 px-5 py-2 bg-teal-700 text-white font-semibold rounded-lg shadow-md hover:bg-teal-600 hover:ring-2 hover:ring-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-200 transition cursor-pointer"
+            icon={<IoIosAddCircle className="size-6" />}
+            color={"teal"}
           >
-            <IoIosAddCircle className="size-6" />
             New
-          </button>
+          </Button>
         </div>
 
         <div className="flex gap-4">
-          <button className="text-white p-0">
-            <FaUser className="size-6" />
-          </button>
-          <button
-            onClick={logout}
-            className="text-sm px-5 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:underline"
-          >
-            Logout
-          </button>
+          <UserMenuDropdown onLogout={logout} />
         </div>
       </div>
     </nav>
